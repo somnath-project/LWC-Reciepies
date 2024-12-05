@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Conditional Rendering">
+        <p lwc:if={property1}>Descrption of First Operation</p>
+        <p lwc:elseif={property2}>Description of Second Operation</p>
+        <p lwc:else>No Opeartion</p>
+        <lightning-button variant="brand" label={buttonLabel} onclick={clickHandler}></lightning-button> 
+    </lightning-card>
+    <lightning-card title="Wish Meassages">
+        <div>
+            <template lwc:if={isMorning}>
+              <p>Good Morning!</p>
+            </template>
+            <template lwc:elseif={isAfternoon}>
+              <p>Good Afternoon!</p>
+            </template>
+            <template lwc:else>
+              <p>Good Evening!</p>
+            </template>
+          </div>
+          <lightning-input type="Number" label="Enter Time" onchange={timeHandler}></lightning-input>
+          <lightning-button variant="brand" label="Show Message" onclick={clickHandler}></lightning-button>
+    </lightning-card>
+
+    <lightning-card title="Retail Discount Calculation">
+        <div>
+            <template lwc:if={message1}>Congratulations you got 20% Discount</template>
+            <template lwc:elseif={message2}>Congratulations you got 10% Discount</template>
+            <template lwc:else>No Discount</template>
+        </div>
+        <lightning-input type="Number" label="Enter the Amount" onchange={amountHandler}></lightning-input>
+        <lightning-button variant="brand" label="Calculate Value" onclick={clickHandler}></lightning-button>
+        <div>Total Value after Discount={totalValue}</div>
+    </lightning-card>
+</template>
