@@ -25,7 +25,7 @@ export default class CondtionalRendering extends LightningElement {
     this.time = event.target.value;
   }
   //connectedCallback() {
-    //const currentHour = new Date().getHours();
+    //const currentHour = new Date().getHours();------To get current date and time automically
     clickHandler(){
         
     if (this.time < 12) {
@@ -49,7 +49,7 @@ export default class CondtionalRendering extends LightningElement {
   clickHandler(){
     if(this.amount>1000){
         this.message1=true;
-        this.totalValue = (this.totalValue) - (this.totalValue*this.discount1);
+        this.totalValue = Number(this.amount) - Number(this.amount*this.discount1);
     }
     else if(this.amount>500 && this.amount<1000){
         this.message2=true;
