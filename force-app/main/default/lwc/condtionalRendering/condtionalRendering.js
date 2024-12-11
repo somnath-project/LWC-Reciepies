@@ -37,6 +37,7 @@ export default class CondtionalRendering extends LightningElement {
       this.isAfternoon = false;
     }
   }
+  //Discount code
   message1=false;
   message2=false;
   discount1=0.2;
