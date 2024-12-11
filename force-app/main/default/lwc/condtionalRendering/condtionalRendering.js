@@ -1,3 +1,4 @@
+import FirstName from '@salesforce/schema/Contact.FirstName';
 import { LightningElement } from 'lwc';
 
 export default class CondtionalRendering extends LightningElement {
@@ -63,4 +64,33 @@ export default class CondtionalRendering extends LightningElement {
     }
     
   }
+
+PersonInfo=["Mahesh", "Rushikesh","Vinod","Ajeet","Ramesh","Gaurav"];
+
+Contact=[
+  {
+    id:1,
+    FirstName: "Mahesh",
+    LastName:"Thakre",
+    
+  },
+  {
+    id:2,
+    FirstName: "Vinod",
+    LastName:"Borikar",
+    
+  },
+  {
+    id:3,
+    FirstName: "Rushikesh",
+    LastName:"Zende",
+    
+  },
+  {
+    id:4,
+    FirstName: "Somnath",
+    LastName:"Ekhande",
+    
+  }
+];
 }

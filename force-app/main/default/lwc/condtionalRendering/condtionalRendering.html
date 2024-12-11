@@ -31,4 +31,43 @@
         <lightning-button variant="brand" label="Calculate Value" onclick={clickHandler3}></lightning-button>
         <div>Total Value after Discount={totalValue}</div>
     </lightning-card>
-</template>
+
+    <lightning-card title="forEach Loop">
+      <div class="slds-p-around_small">
+        <template for:each={PersonInfo} for:item="per">
+          <p key={per.id}>{per} </p>
+        </template>
+      </div>
+    </lightning-card>
+  
+    <lightning-card title="Complex data">
+      <div class="slds-p-around_medium">
+      
+        <template for:each={Contact} for:item="con">
+          <p key={con.id}>{con.FirstName} {con.LastName} </p>
+        </template>
+      
+      
+      </div>
+    </lightning-card>
+
+    <lightning-card title="iterator">
+      <div class="slds-m-around_medium">
+        
+        <template iterator:it={Contact}>
+          <div key={it.value.id}>
+            
+             <div lwc:if={it.first} class="first-list"><p>list start </p></div>
+         
+             <p> {it.value.FirstName} {it.value.LastName}</p>
+             
+             <div lwc:if={it.last} class="last-list"><p> List end</p></div> 
+           
+            
+          </div>
+          
+        </template>
+
+      </div>
+    </lightning-card>
+  </template>
