@@ -3,7 +3,7 @@
         <p lwc:if={property1}>Descrption of First Operation</p>
         <p lwc:elseif={property2}>Description of Second Operation</p>
         <p lwc:else>No Opeartion</p>
-        <lightning-button variant="brand" label={buttonLabel} onclick={clickHandler}></lightning-button> 
+        <lightning-button variant="brand" label={buttonLabel} onclick={clickHandler1}></lightning-button> 
     </lightning-card>
     <lightning-card title="Wish Meassages">
         <div>
@@ -18,7 +18,7 @@
             </template>
           </div>
           <lightning-input type="Number" label="Enter Time" onchange={timeHandler}></lightning-input>
-          <lightning-button variant="brand" label="Show Message" onclick={clickHandler}></lightning-button>
+          <lightning-button variant="brand" label="Show Message" onclick={clickHandler2}></lightning-button>
     </lightning-card>
 
     <lightning-card title="Retail Discount Calculation">
@@ -28,7 +28,7 @@
             <template lwc:else>No Discount</template>
         </div>
         <lightning-input type="Number" label="Enter the Amount" onchange={amountHandler}></lightning-input>
-        <lightning-button variant="brand" label="Calculate Value" onclick={clickHandler}></lightning-button>
+        <lightning-button variant="brand" label="Calculate Value" onclick={clickHandler3}></lightning-button>
         <div>Total Value after Discount={totalValue}</div>
     </lightning-card>
 </template>
