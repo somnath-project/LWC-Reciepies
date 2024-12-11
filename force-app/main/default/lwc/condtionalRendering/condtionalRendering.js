@@ -4,7 +4,7 @@ export default class CondtionalRendering extends LightningElement {
     property1=false;
     property2=false;
     buttonLabel='Button 3';
-    clickHandler(){
+    clickHandler1(){
         if(this.property1==true){
             this.property1=false;
             this.property2=true;
@@ -26,7 +26,7 @@ export default class CondtionalRendering extends LightningElement {
   }
   //connectedCallback() {
     //const currentHour = new Date().getHours();------To get current date and time automically
-    clickHandler(){
+    clickHandler2(){
         
     if (this.time < 12) {
       this.isMorning = true;
@@ -46,17 +46,19 @@ export default class CondtionalRendering extends LightningElement {
   amountHandler(event){
     this.amount = event.target.value;
   }
-  clickHandler(){
-    if(this.amount>1000){
+  clickHandler3(){
+    if(this.amount>=1000){
         this.message1=true;
         this.totalValue = Number(this.amount) - Number(this.amount*this.discount1);
     }
     else if(this.amount>500 && this.amount<1000){
         this.message2=true;
+        this.totalValue = Number(this.amount) - Number(this.amount*this.discount2);
     }
     else{
         this.message1=false;
         this.message2=false;
+        this.totalValue = Number(this.amount);
     }
     
   }
