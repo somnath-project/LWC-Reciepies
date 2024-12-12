@@ -1,0 +1,7 @@
+<template>
+    <lightning-card title="Employee Details using For each">
+        <template for:each={Employee} for:item="emp">
+            <p key={emp.id}>{emp.Name}    {emp.Age}      {emp.Salary}</p>
+        </template>
+    </lightning-card>
+</template>

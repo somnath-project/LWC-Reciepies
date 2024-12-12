@@ -19,10 +19,6 @@
             <field>Email__c</field>
             <type>email</type>
         </recipients>
-        <recipients>
-            <recipient>maheshdev@flynaut.com</recipient>
-            <type>user</type>
-        </recipients>
         <senderType>CurrentUser</senderType>
         <template>unfiled$public/Send_EmailToTeamMember</template>
     </alerts>
