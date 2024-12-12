@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Email_notification_for_Event_Team_Member</name>
-        <label>Email notification for Event Team Member</label>
-        <locationX>1070</locationX>
-        <locationY>559</locationY>
-        <actionName>Event_Team_Member__c.Email_Alert_For_Event_Team_Member</actionName>
+        <name>Email_Notification</name>
+        <label>Email Notification</label>
+        <locationX>1028</locationX>
+        <locationY>487</locationY>
+        <actionName>Event_Team_Member__c.NewEventTeam_MemberEmailAlert</actionName>
         <actionType>emailAlert</actionType>
         <connector>
             <targetReference>if_event_team_member_is_update</targetReference>
@@ -17,7 +17,7 @@
                 <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Event_Team_Member__c.Email_Alert_For_Event_Team_Member</nameSegment>
+        <nameSegment>Event_Team_Member__c.NewEventTeam_MemberEmailAlert</nameSegment>
         <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
@@ -46,7 +46,7 @@
                 <leftValueReference>$Record.Event_Details__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -195,50 +195,7 @@
         <label>Create new team member record</label>
         <locationX>1267</locationX>
         <locationY>448</locationY>
-        <inputAssignments>
-            <field>Contact_Information__c</field>
-            <value>
-                <elementReference>$Record__Prior.Contact_Information__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Country_Code__c</field>
-            <value>
-                <elementReference>$Record__Prior.Country_Code__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Event_Details__c</field>
-            <value>
-                <elementReference>$Record__Prior.Event_Details__r.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Event_End_Date__c</field>
-            <value>
-                <elementReference>$Record__Prior.Event_Details__r.Event_Date_Time__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Event_Start_Date__c</field>
-            <value>
-                <elementReference>$Record__Prior.Event_Start_Date__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Events_Managers__c</field>
-            <value>
-                <elementReference>$Record__Prior.Events_Managers__r.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Name</field>
-            <value>
-                <elementReference>$Record__Prior.Name</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Event_Team_Member__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <inputReference>$Record</inputReference>
     </recordCreates>
     <recordLookups>
         <name>Get_Manager_Record</name>
@@ -288,7 +245,7 @@
         <locationX>891</locationX>
         <locationY>567</locationY>
         <connector>
-            <targetReference>Email_notification_for_Event_Team_Member</targetReference>
+            <targetReference>Email_Notification</targetReference>
         </connector>
         <inputAssignments>
             <field>Event_End_Date__c</field>
