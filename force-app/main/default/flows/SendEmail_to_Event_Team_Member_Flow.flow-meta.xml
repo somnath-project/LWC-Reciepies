@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Email_notification_for_Event_Team_Member</name>
+        <label>Email notification for Event Team Member</label>
+        <locationX>1070</locationX>
+        <locationY>559</locationY>
+        <actionName>Event_Team_Member__c.Email_Alert_For_Event_Team_Member</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>if_event_team_member_is_update</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Event_Team_Member__c.Email_Alert_For_Event_Team_Member</nameSegment>
+        <offset>0</offset>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <customErrors>
+        <name>Error_for_invalid_Phone_Number</name>
+        <label>Error for invalid Phone  Number</label>
+        <locationX>184</locationX>
+        <locationY>423</locationY>
+        <customErrorMessages>
+            <errorMessage>Please enter a valid phone number.</errorMessage>
+            <fieldSelection>Contact_Information__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_the_Event_Details_Field</name>
+        <label>Check the Event Details Field</label>
+        <locationX>735</locationX>
+        <locationY>330</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Event_Details_Field</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Event_Details__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Event_Details__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>OldEventDetailsRecord.Event_Details__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Record_From_Event_details</targetReference>
+            </connector>
+            <label>Event Details Field</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>if_event_team_member_is_update</name>
+        <label>if event team member is update</label>
+        <locationX>1157</locationX>
+        <locationY>336</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>team_member_update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Event_Details__r.Id</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_new_team_member_record</targetReference>
+            </connector>
+            <label>team member update</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Validate_Phone_Number</name>
+        <label>Validate Phone Number</label>
+        <locationX>499</locationX>
+        <locationY>318</locationY>
+        <defaultConnector>
+            <targetReference>Error_for_invalid_Phone_Number</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Invalid Phone Number</defaultConnectorLabel>
+        <rules>
+            <name>Valid_Phone_Number</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact_Information__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ValidationFormulaforPhoneNumber</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_the_Event_Details_Field</targetReference>
+            </connector>
+            <label>Valid Phone Number</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>ValidationFormulaforPhoneNumber</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(
+    OR(
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;India (+91)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[6-9][0-9]{9}$&quot;) /* India: Starts with 6-9, exactly 10 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;United States (+1)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[2-9][0-9]{9}$&quot;) /* US: Starts with 2-9, exactly 10 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;United Kingdom (+44)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[7][0-9]{9}$&quot;) /* UK: Starts with 7, exactly 10 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;Australia (+61)&apos;),
+            NOT(REGEX({!$Record.Contact_Information__c}, &quot;^[4][0-9]{8}$&quot;)) /* Australia: Starts with 4, exactly 9 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;Germany (+49)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^(15|16|17)[0-9]{8}$&quot;) /* Germany: Starts with 15, 16, or 17, exactly 10 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;France (+33)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[6|7][0-9]{8}$&quot;) /* France: Starts with 6 or 7, exactly 9 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;Italy (+39)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[3][0-9]{8}$&quot;) /* Italy: Starts with 3, exactly 9 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;Brazil (+55)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^[9][0-9]{8}$&quot;) /* Brazil: Starts with 9, exactly 9 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;China (+86)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^(13|14|15|16|17|18|19)[0-9]{8}$&quot;) /* China: Starts with 13–19, exactly 11 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;Japan (+81)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^(70|80|90)[0-9]{8}$&quot;) /* Japan: Starts with 70, 80, or 90, exactly 10 digits */
+        ),
+        AND(
+            ISPICKVAL({!$Record.Country_Code__c}, &apos;South Korea (+82)&apos;),
+            REGEX({!$Record.Contact_Information__c}, &quot;^(10|11|16|17|18|19)[0-9]{8}$&quot;) /* South Korea: Starts with 10, 11, 16–19, exactly 10 digits */
+        )
+    )
+)</expression>
+    </formulas>
+    <interviewLabel>SendEmail to Event Team Member Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SendEmail to Event Team Member Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_new_team_member_record</name>
+        <label>Create new team member record</label>
+        <locationX>1267</locationX>
+        <locationY>448</locationY>
+        <inputAssignments>
+            <field>Contact_Information__c</field>
+            <value>
+                <elementReference>$Record__Prior.Contact_Information__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Country_Code__c</field>
+            <value>
+                <elementReference>$Record__Prior.Country_Code__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Event_Details__c</field>
+            <value>
+                <elementReference>$Record__Prior.Event_Details__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Event_End_Date__c</field>
+            <value>
+                <elementReference>$Record__Prior.Event_Details__r.Event_Date_Time__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Event_Start_Date__c</field>
+            <value>
+                <elementReference>$Record__Prior.Event_Start_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Events_Managers__c</field>
+            <value>
+                <elementReference>$Record__Prior.Events_Managers__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>$Record__Prior.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Event_Team_Member__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Manager_Record</name>
+        <label>Get Manager Record</label>
+        <locationX>745</locationX>
+        <locationY>592</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Event_Team_Member</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Events_Managers__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Events_Managers__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Record_From_Event_details</name>
+        <label>Get Record From Event details</label>
+        <locationX>597</locationX>
+        <locationY>623</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Manager_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Event_Details__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Event_Details__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Event_Team_Member</name>
+        <label>Update Event Team Member</label>
+        <locationX>891</locationX>
+        <locationY>567</locationY>
+        <connector>
+            <targetReference>Email_notification_for_Event_Team_Member</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Event_End_Date__c</field>
+            <value>
+                <elementReference>Get_Record_From_Event_details.End_Date_Time__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Event_Start_Date__c</field>
+            <value>
+                <elementReference>Get_Record_From_Event_details.Event_Date_Time__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Events_Managers__c</field>
+            <value>
+                <elementReference>Get_Record_From_Event_details.Events_Managers__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Event_Details__r.Event_Team_Members__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>188</locationX>
+        <locationY>57</locationY>
+        <connector>
+            <targetReference>Validate_Phone_Number</targetReference>
+        </connector>
+        <object>Event_Team_Member__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>EmailNotificationTemplate</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&amp;lt;html&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;lt;body&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;Hello {!$Record.Name},&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;You have been associated with the following event. Please find the event details below:&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Name:&amp;lt;/strong&amp;gt; {!$Record.Event_Details__r.Name}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Start Date:&amp;lt;/strong&amp;gt;{!$Record.Event_Start_Date__c}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event End Date:&amp;lt;/strong&amp;gt; {!$Record.Event_End_Date__c}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Manager Name:&amp;lt;/strong&amp;gt; {!$Record.Events_Managers__r.Name}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Manager Phone:&amp;lt;/strong&amp;gt; {!$Record.Events_Managers__r.Phone_Number__c}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Manager Email:&amp;lt;/strong&amp;gt; {!$Record.Events_Managers__r.Email__c}&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;Thank you,&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Event Management Team&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;lt;/body&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;lt;/html&amp;gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>OldEventDetailsRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Event_Team_Member__c</objectType>
+    </variables>
+</Flow>
