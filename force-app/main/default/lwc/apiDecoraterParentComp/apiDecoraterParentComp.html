@@ -1,0 +1,9 @@
+<template>
+    <lightning-card title="API Decorator with parent to child Comp" icon-name="custom:custom42">
+        <div class="slds-p-around_medium">
+            <lightning-input label="Name" onchange={handleChange}></lightning-input>
+            <c-api-decorater-child-comp name= {nameMesg}  ongreet ={handleGreeting}> </c-api-decorater-child-comp>
+            <p>{greetingMessage}</p>
+        </div>
+    </lightning-card>
+</template>
