@@ -1,0 +1,67 @@
+<template>
+    <lightning-card title="Dynamic Form For DropDownList">
+        <div class="slds-p-around_medium">
+            <lightning-combobox
+              name="options"
+              label="Select Form Type"
+              value={selectedFormValue}
+              placeholder="Select an option"
+              options={formTypeOptions}
+              onchange={handleChange}>
+            </lightning-combobox>
+
+            <template lwc:if= {ShowNameField}>
+                <lightning-input 
+              type="text"
+              label="Full Name"
+            ></lightning-input>
+            </template>
+            <template lwc:if ={ShowEmailField}>
+                <lightning-input label="Email Address"></lightning-input>
+            </template>
+
+            <!-- <template lwc:else >
+                <p>No form is selected</p>
+            </template> -->
+             
+
+        </div>
+    </lightning-card>
+
+    <lightning-card title="Multiselect DropDownList">
+        <div class="slds-p-around_medium">
+            <!-- <div>  
+                <label>Select Options:</label>  
+                <template for:each={options} for:item="option">  
+                    <div key={option.value}>  
+                        <input type="checkbox" value={option.value} onchange={multiselecthandleChange} />  
+                        <label>{option.label}</label>  
+                    </div>  
+                </template>  
+            </div>  
+            <p>Selected Values: {selectedValues}</p> -->
+            
+            <!-- Multiselect drop down -->
+            
+            <div class="dropdown-container">  
+                <label>Select Options:</label>  
+                <div class="dropdown">  
+                    <div class="dropdown-header" onclick={toggleDropdown}>  
+                        <span>{selectedLabels}</span>  
+                        <span class="dropdown-arrow">&#9662;</span>  
+                    </div>  
+                    <div class="dropdown-list" if:true={isDropdownOpen}>  
+                        <template for:each={options} for:item="option">  
+                            <div key={option.value} class="dropdown-item">  
+                                <input type="checkbox" value={option.value} onchange={handleChange} />  
+                                <label>{option.label}</label>  
+                            </div>  
+                        </template>  
+                    </div>  
+                </div>  
+            </div>  
+            <p>Selected Values: {selectedValues}</p> 
+        </div> 
+    </lightning-card>
+            
+</template>
