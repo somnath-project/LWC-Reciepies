@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="Search Account">
+        <lightning-input name="enter-search"
+            label="Enter Industry Type"
+            type="search" onclick={searchHandler}> 
+         </lightning-input>
+</lightning-card>
+<lightning-card title="Account Details">
+    <lightning-datatable
+            key-field="Name"
+            data={data}
+            show-row-number-column
+            row-number-offset={rowOffset}
+            suppress-bottom-bar
+            columns={accountColumn}>
+    </lightning-datatable>
+    <lightning-button type="submit" label="Save"></lightning-button>
+</lightning-card>
+</template>
