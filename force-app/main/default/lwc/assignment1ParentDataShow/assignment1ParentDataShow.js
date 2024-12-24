@@ -1,6 +1,6 @@
-import { LightningElement, wire } from 'lwc';
-import getcontactList from '@salesforce/apex/ContactListDetails.getContactList';
-import Phone from '@salesforce/schema/Account.Phone';
+import { LightningElement} from 'lwc';
+//import getcontactList from '@salesforce/apex/ContactListDetails.getContactList';
+//import Phone from '@salesforce/schema/Account.Phone';
 export default class Assignment1ParentDataShow extends LightningElement {
     
 
