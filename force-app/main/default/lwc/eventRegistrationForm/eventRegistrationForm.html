@@ -1,0 +1,60 @@
+<template>
+    <lightning-card title="Event Registration" icon-name="action:new_event">
+        <div class="slds-p-horizontal_medium">
+            <!-- Edit Form -->
+            <lightning-record-edit-form 
+                object-api-name="Registration__c" 
+                onsuccess={handleSuccess}>
+                
+                <!-- Name Field -->
+                <lightning-input-field 
+                    field-name="Attendee_Name__c">
+                </lightning-input-field>
+
+                <!-- Phone Field -->
+                <lightning-input-field 
+                    field-name="Attendee_Phone__c">
+                </lightning-input-field>
+
+                <!-- Email Field -->
+                <lightning-input-field 
+                    field-name="Attendee_Email__c">
+                </lightning-input-field>
+
+                <!-- Event Lookup Field -->
+                <lightning-input-field 
+                    field-name="Event_Details__c">
+                </lightning-input-field>
+
+                <!-- Ticket Type Field -->
+                <lightning-input-field 
+                    field-name="Ticket_Type__c">
+                </lightning-input-field>
+
+                 <!-- Ticket Price Field -->
+                 <lightning-input-field 
+                 field-name="Ticket_Price__c">
+                </lightning-input-field>
+
+                <!-- Registration Source Field -->
+                <lightning-input-field 
+                field-name="Registration_Source__c">
+               </lightning-input-field>
+
+                <!-- Special Requirements Field -->
+                <lightning-input-field 
+                    field-name="Special_Requirements__c">
+                </lightning-input-field>
+
+                <!-- Submit Button -->
+                <div class="slds-m-top_medium">
+                    <lightning-button 
+                        variant="brand" 
+                        type="submit" 
+                        label="Register">
+                    </lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>
